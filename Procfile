@@ -1,1 +1,1 @@
-web: python buy_elephant.py
+web: python guess_city.py
