@@ -115,6 +115,15 @@ def handle_dialog(res, req):
         else:
             res['response'][
                 'text'] = 'Я показываю вам город, а вы должны его угадать'
+    elif req['request']['original_utterance'] == 'Покажи город на карте':
+        res['response'][
+            'text'] = 'Показываю\n Сыграем ещё?'
+        res['response']['buttons'] = [
+            {
+                'title': el,
+                'hide': True
+            } for el in (['Да', 'Нет'])
+        ]
     else:
         start = False
         if req['request']['nlu']['entities'][0]['value']['city'] == city:
@@ -123,12 +132,12 @@ def handle_dialog(res, req):
                 'title': el,
                 'hide': True
             } for el in (['Да', 'Нет'])
-                                         ] +\
-            [{
-                'title': el,
-                'hide': True,
-                'url': f'https://yandex.ru/maps/?mode=search&text={city}'
-            } for el in ['Покажи город на карте']]
+                                         ] + \
+                                         [{
+                                             'title': el,
+                                             'hide': True,
+                                             'url': f'https://yandex.ru/maps/?mode=search&text={city}'
+                                         } for el in ['Покажи город на карте']]
         else:
             res['response']['text'] = \
                 'Неправильно. Попробуй еще разок!'
