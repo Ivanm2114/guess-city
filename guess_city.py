@@ -53,7 +53,7 @@ def main():
 
 
 def handle_dialog(res, req):
-    global city, start
+    global city, start, city_guessed
     user_id = req['session']['user_id']
 
     # если пользователь новый, то просим его представиться.
@@ -92,6 +92,7 @@ def handle_dialog(res, req):
 
     elif req['request']["original_utterance"] == 'Да':
         start = False
+        city_guessed = False
         res['response']['text'] = 'Хорошо'
         city = random.choice(list(cities.keys()))
         if city in cities:
@@ -133,19 +134,16 @@ def handle_dialog(res, req):
         ]
     else:
         start = False
-        if city_guessed:
+        if not city_guessed:
             if req['request']['nlu']['entities'][0]['value']['city'] == city:
-                res['response']['text'] = 'Правильно. Сыграем еще?'
-                res['response']['buttons'] = [{
-                    'title': el,
-                    'hide': True
-                } for el in (['Да', 'Нет'])
-                                             ] + \
-                                             [{
-                                                 'title': el,
-                                                 'hide': True,
-                                                 'url': f'https://yandex.ru/maps/?mode=search&text={city}'
-                                             } for el in ['Покажи город на карте']]
+                res['response']['text'] = 'Правильно\nА в какой стране?'
+                res['response']['buttons'] = [
+                    {
+                        'title': el,
+                        'hide': True
+                    } for el in ['Помощь']
+                ]
+                city_guessed = True
             else:
                 res['response']['text'] = \
                     'Неправильно. Попробуй еще разок!'
