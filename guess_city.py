@@ -119,13 +119,16 @@ def handle_dialog(res, req):
         start = False
         if req['request']['nlu']['entities'][0]['value']['city'] == city:
             res['response']['text'] = 'Правильно. Сыграем еще?'
-            res['response']['buttons'] = [
-                {
-                    'title': el,
-                    'hide': True
-                } for el in (['Да', 'Нет'])
-            ]
-            
+            res['response']['buttons'] = [{
+                'title': el,
+                'hide': True
+            } for el in (['Да', 'Нет'])
+                                         ] +\
+            [{
+                'title': el,
+                'hide': True,
+                'url': f'https://yandex.ru/maps/?mode=search&text={city}'
+            } for el in ['Покажи город на карте']]
         else:
             res['response']['text'] = \
                 'Неправильно. Попробуй еще разок!'
