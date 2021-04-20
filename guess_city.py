@@ -93,13 +93,13 @@ def handle_dialog(res, req):
     elif req['request']["original_utterance"] == 'Да':
         start = False
         city_guessed = False
-        res['response']['text'] = f'{sessionStorage[user_id]["first_name"]}\n' + 'Хорошо'
+        res['response']['text'] = f'{sessionStorage[user_id]["first_name"].capitalize()}\n' + 'Хорошо'
         city = random.choice(list(cities.keys()))
         if city in cities:
             res['response']['card'] = {}
             res['response']['card']['type'] = 'BigImage'
             res['response']['card']['image_id'] = random.choice(cities[city])
-            res['response']['card']['title'] = 'Какой город?'
+            res['response']['card']['title'] = f'{sessionStorage[user_id]["first_name"].capitalize()}\n' + 'Какой город?'
             res['response']['buttons'] = [
                 {
                     'title': el,
@@ -122,7 +122,7 @@ def handle_dialog(res, req):
             ]
         else:
             res['response'][
-                'text'] = f'{sessionStorage[user_id]["first_name"]}\n' + 'Я показываю вам город, а вы должны его угадать'
+                'text'] = f'{sessionStorage[user_id]["first_name"].capitalize()}\n' + 'Я показываю вам город, а вы должны его угадать'
     elif req['request']['original_utterance'] == 'Покажи город на карте':
         res['response'][
             'text'] = f'{sessionStorage[user_id]["first_name"]}\n' + 'Показываю\n Сыграем ещё?'
@@ -136,7 +136,8 @@ def handle_dialog(res, req):
         start = False
         if not city_guessed:
             if req['request']['nlu']['entities'][0]['value']['city'] == city:
-                res['response']['text'] = f'{sessionStorage[user_id]["first_name"]}\n' + 'Правильно\nА в какой стране?'
+                res['response'][
+                    'text'] = f'{sessionStorage[user_id]["first_name"].capitalize()}\n' + 'Правильно\nА в какой стране?'
                 res['response']['buttons'] = [
                     {
                         'title': el,
@@ -146,7 +147,7 @@ def handle_dialog(res, req):
                 city_guessed = True
             else:
                 res['response']['text'] = \
-                    f'{sessionStorage[user_id]["first_name"]}\n' + 'Неправильно. Попробуй еще разок!'
+                    f'{sessionStorage[user_id]["first_name"].capitalize()}\n' + 'Неправильно. Попробуй еще разок!'
                 res['response']['buttons'] = [
                     {
                         'title': el,
@@ -155,7 +156,8 @@ def handle_dialog(res, req):
                 ]
         else:
             if req['request']['nlu']['entities'][0]['value']['country'] in countries[city]:
-                res['response']['text'] = f'{sessionStorage[user_id]["first_name"]}\n' + 'Правильно. Сыграем еще?'
+                res['response'][
+                    'text'] = f'{sessionStorage[user_id]["first_name"].capitalize()}\n' + 'Правильно. Сыграем еще?'
                 res['response']['buttons'] = [{
                     'title': el,
                     'hide': True
@@ -168,7 +170,7 @@ def handle_dialog(res, req):
                                              } for el in ['Покажи город на карте']]
             else:
                 res['response']['text'] = \
-                    f'{sessionStorage[user_id]["first_name"]}\n' + 'Неправильно. Попробуй еще разок!'
+                    f'{sessionStorage[user_id]["first_name"].capitalize()}\n' + 'Неправильно. Попробуй еще разок!'
                 res['response']['buttons'] = [
                     {
                         'title': el,
