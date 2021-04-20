@@ -99,7 +99,8 @@ def handle_dialog(res, req):
             res['response']['card'] = {}
             res['response']['card']['type'] = 'BigImage'
             res['response']['card']['image_id'] = random.choice(cities[city])
-            res['response']['card']['title'] = f'{sessionStorage[user_id]["first_name"].capitalize()}\n' + 'Какой город?'
+            res['response']['card'][
+                'title'] = f'{sessionStorage[user_id]["first_name"].capitalize()},\n' + 'какой город?'
             res['response']['buttons'] = [
                 {
                     'title': el,
@@ -107,13 +108,14 @@ def handle_dialog(res, req):
                 } for el in ['Помощь']
             ]
     elif req['request']["original_utterance"] == 'Нет':
-        res['response']['text'] = f'{sessionStorage[user_id]["first_name"]}\n' + 'Ну и ладно'
+        res['response']['text'] = f'{sessionStorage[user_id]["first_name"].capitalize()},\n' + 'Ну и ладно'
         res['response']['end_session'] = True
         return
     elif req['request']['original_utterance'] == 'Помощь':
         if start:
             res['response'][
-                'text'] = f'{sessionStorage[user_id]["first_name"]}\n' + 'Я показываю вам город, а вы должны его угадать\n Сыграем?'
+                'text'] = f'{sessionStorage[user_id]["first_name"]}\n' + \
+                          'Я показываю вам город, а вы должны его угадать\n Сыграем?'
             res['response']['buttons'] = [
                 {
                     'title': el,
@@ -122,7 +124,8 @@ def handle_dialog(res, req):
             ]
         else:
             res['response'][
-                'text'] = f'{sessionStorage[user_id]["first_name"].capitalize()}\n' + 'Я показываю вам город, а вы должны его угадать'
+                'text'] = f'{sessionStorage[user_id]["first_name"].capitalize()}\n' + \
+                          'Я показываю вам город, а вы должны его угадать'
     elif req['request']['original_utterance'] == 'Покажи город на карте':
         res['response'][
             'text'] = f'{sessionStorage[user_id]["first_name"]}\n' + 'Показываю\n Сыграем ещё?'
