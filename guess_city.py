@@ -118,9 +118,14 @@ def handle_dialog(res, req):
     else:
         start = False
         if req['request']['nlu']['entities'][0]['value']['city'] == city:
-            res['response']['text'] = 'Правильно'
-            res['response']['end_session'] = True
-            return
+            res['response']['text'] = 'Правильно. Сыграем еще?'
+            res['response']['buttons'] = [
+                {
+                    'title': el,
+                    'hide': True
+                } for el in (['Да', 'Нет'])
+            ]
+            
         else:
             res['response']['text'] = \
                 'Неправильно. Попробуй еще разок!'
