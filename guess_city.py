@@ -23,11 +23,18 @@ cities = {
               '3450494/aca7ed7acefde22341bdc']
 }
 
+countries = {
+    'москва': ['россия', 'российская федерация'],
+    'нью-йорк': ['сша', 'соединенные штаты америки'],
+    'париж': ['франция']
+}
+
 # создаем словарь, где для каждого пользователя
 # мы будем хранить его имя
 sessionStorage = {}
 
 city = ''
+city_guessed = False
 
 
 @app.route('/post', methods=['POST'])
@@ -126,27 +133,50 @@ def handle_dialog(res, req):
         ]
     else:
         start = False
-        if req['request']['nlu']['entities'][0]['value']['city'] == city:
-            res['response']['text'] = 'Правильно. Сыграем еще?'
-            res['response']['buttons'] = [{
-                'title': el,
-                'hide': True
-            } for el in (['Да', 'Нет'])
-                                         ] + \
-                                         [{
-                                             'title': el,
-                                             'hide': True,
-                                             'url': f'https://yandex.ru/maps/?mode=search&text={city}'
-                                         } for el in ['Покажи город на карте']]
-        else:
-            res['response']['text'] = \
-                'Неправильно. Попробуй еще разок!'
-            res['response']['buttons'] = [
-                {
+        if city_guessed:
+            if req['request']['nlu']['entities'][0]['value']['city'] == city:
+                res['response']['text'] = 'Правильно. Сыграем еще?'
+                res['response']['buttons'] = [{
                     'title': el,
                     'hide': True
-                } for el in ['Помощь']
-            ]
+                } for el in (['Да', 'Нет'])
+                                             ] + \
+                                             [{
+                                                 'title': el,
+                                                 'hide': True,
+                                                 'url': f'https://yandex.ru/maps/?mode=search&text={city}'
+                                             } for el in ['Покажи город на карте']]
+            else:
+                res['response']['text'] = \
+                    'Неправильно. Попробуй еще разок!'
+                res['response']['buttons'] = [
+                    {
+                        'title': el,
+                        'hide': True
+                    } for el in ['Помощь']
+                ]
+        else:
+            if req['request']['nlu']['entities'][0]['value']['country'] in countries[city]:
+                res['response']['text'] = 'Правильно. Сыграем еще?'
+                res['response']['buttons'] = [{
+                    'title': el,
+                    'hide': True
+                } for el in (['Да', 'Нет'])
+                                             ] + \
+                                             [{
+                                                 'title': el,
+                                                 'hide': True,
+                                                 'url': f'https://yandex.ru/maps/?mode=search&text={city}'
+                                             } for el in ['Покажи город на карте']]
+            else:
+                res['response']['text'] = \
+                    'Неправильно. Попробуй еще разок!'
+                res['response']['buttons'] = [
+                    {
+                        'title': el,
+                        'hide': True
+                    } for el in ['Помощь']
+                ]
 
 
 def get_city(req):
